@@ -301,19 +301,15 @@ def main():
             col_email, col_pdf = st.columns(2)
             with col_email:
               recipient_email = st.text_input("Email du destinataire", key="email_input")
-              if st.button("Envoyer par Gmail", key="btn_send"):
-                  if recipient_email:
-                      subject = f"Projet: {st.session_state.form_data.get('Nom du Projet', 'Nouveau Projet')}"
-                      body = format_email_body()
-
-                      pdf_path = generate_pdf(st.session_state.form_data)
-
-                      gmail_url = (f"https://mail.google.com/mail/?view=cm&fs=1&to={recipient_email}"
-                                  f"&su={urllib.parse.quote(subject)}&body={urllib.parse.quote(body + chr(10) + chr(10) + 'Note: Please find the attached PDF document with project details.')}")
-                      webbrowser.open(gmail_url)
-                      os.remove(pdf_path)
-                  else:
-                      st.error("Veuillez entrer une addresse email.")
+              if  recipient_email:
+                subject = f"Projet: {st.session_state.form_data.get('Nom du Projet', 'Nouveau Projet')}"
+                body = format_email_body()
+                gmail_url = (f"https://mail.google.com/mail/?view=cm&fs=1&to={recipient_email}"
+                f"&su={urllib.parse.quote(subject)}&body={urllib.parse.quote(body + chr(10) + chr(10) + 'Note: Please find the attached PDF document with project details.')}")
+                st.markdown(f'<a href="{gmail_url}" target="_blank"><button style="background-color: #38b2ce; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Envoyer par Gmail</button></a>', unsafe_allow_html=True)
+              else:
+                  st.error("Veuillez entrer une addresse email.")
+            
 
             with col_pdf:
               pdf_path = generate_pdf(st.session_state.form_data)
